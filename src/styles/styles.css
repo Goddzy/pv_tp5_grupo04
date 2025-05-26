@@ -1,7 +1,4 @@
 .fixed-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   background-color: #e5e7eb; /* gris claro */
   color: #1f2937;            /* gris oscuro */

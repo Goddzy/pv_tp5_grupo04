@@ -4,15 +4,20 @@ import { Container } from "react-bootstrap";
 
 function Inicio() {
   return (
-    <Container className="text-center mt-5 pb-5">
-      <h1 className="mb-3 fs-1"> Administración de Alumnos</h1>
-      <p className="fs-5 text-muted">
-        Bienvenido al sistema de gestión de alumnos. Organiza, edita y accedé fácilmente a toda la información.
-      </p>
-      <hr />
-        <h2 className="mt-5 mb-3">Lista de alumnos</h2>
-      
-    </Container>
+    <div className="home-container d-flex align-items-center justify-content-center text-center">
+      <div className="container bg-white p-5 rounded-4 shadow-lg">
+        <h1 className="display-4 fw-bold text-muted my-5">Bienvenido al Sistema de Gestión de Alumnos</h1>
+        <p className="lead text-secondary my-5">
+          Esta plataforma te permite llevar un control completo de tus estudiantes: altas, ediciones, consultas y mucho más.
+        </p>
+        <p className="text-muted mb-2 my-5">
+          Usá el menú para navegar por las distintas secciones y comenzar a trabajar.
+        </p>
+        <p className="fst-italic text-black-50 my-5">
+          Desarrollado con pasión educativa.
+        </p>
+      </div>
+    </div>
   );
 }
 
