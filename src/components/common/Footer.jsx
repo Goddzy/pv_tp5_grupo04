@@ -2,9 +2,9 @@
 
 const Footer = () => {
   return (
-    <div>
-
-    </div>
+     <footer className="fixed-footer">
+      <p>© {new Date().getFullYear()} Todos los derechos reservados.</p>
+    </footer>
   );
 };
 
