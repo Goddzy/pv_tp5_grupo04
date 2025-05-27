@@ -47,7 +47,7 @@ const AboutUs = () => {
                className="avatar-img mb-3"
               />
               <Card.Body>
-                <Card.Title className="fw-bold text-primary">Cari Enrique Gustavo</Card.Title>
+                <Card.Title className="fw-bold text-primary">Cari Enrique Gustavo </Card.Title>
                 <Card.Text className="text-muted">
                  Miembro del grupo 04 de Programación Visual, estudiante de APU.
                 </Card.Text>
