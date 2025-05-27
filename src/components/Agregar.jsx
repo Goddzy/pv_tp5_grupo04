@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function Agregar({ listaAlumnos, setListaAlumnos }) {
   // Estados para cada input
@@ -11,6 +12,9 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
   const [domicilio, setDomicilio] = useState("");
   const [telefono, setTelefono] = useState("");
   const [carrera, setCarrera] = useState("");
+
+const navigate = useNavigate(); // Inicializamos useNavigate
+
 const crearAlumno = (e) => {
     e.preventDefault();
   if( lu.trim()!="" && nombre.trim()!="" && apellido.trim()!="" && curso.trim()!="" && email.trim()!="" && domicilio.trim()!="" && telefono.trim()!="" && carrera.trim()!=""){
@@ -35,6 +39,8 @@ const crearAlumno = (e) => {
       setDomicilio("");
       setTelefono("");
       setCarrera("");
+
+       navigate("/alumnos");
   }
   };
   return (
