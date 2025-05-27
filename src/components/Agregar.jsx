@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+function Agregar({ listaAlumnos, setListaAlumnos, setContador, contador }) {
 
-function Agregar({ listaAlumnos, setListaAlumnos }) {
-  // Estados para cada input
   const [lu, setLu] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -12,14 +10,13 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
   const [domicilio, setDomicilio] = useState("");
   const [telefono, setTelefono] = useState("");
   const [carrera, setCarrera] = useState("");
-
-const navigate = useNavigate(); // Inicializamos useNavigate
-
 const crearAlumno = (e) => {
     e.preventDefault();
   if( lu.trim()!="" && nombre.trim()!="" && apellido.trim()!="" && curso.trim()!="" && email.trim()!="" && domicilio.trim()!="" && telefono.trim()!="" && carrera.trim()!=""){
+      const nuevoLu=lu+String(contador);
+      console.log(nuevoLu)
       const nuevoAlumno = {
-        lu,
+        lu:nuevoLu,
         nombre,
         apellido,
         curso,
@@ -30,7 +27,6 @@ const crearAlumno = (e) => {
       };
 
       setListaAlumnos([...listaAlumnos, nuevoAlumno]);
-
       setLu("");
       setNombre("");
       setApellido("");
@@ -39,8 +35,7 @@ const crearAlumno = (e) => {
       setDomicilio("");
       setTelefono("");
       setCarrera("");
-
-       navigate("/alumnos");
+      setContador(contador+1);
   }
   };
   return (
@@ -58,7 +53,7 @@ const crearAlumno = (e) => {
               <Form.Control
                 type="text"
                 disabled
-                value={lu}
+                value={`${lu}${contador}`}
                 onChange={(e) => setLu(e.target.value)}
                 className="rounded-pill border border-dark"
               />
