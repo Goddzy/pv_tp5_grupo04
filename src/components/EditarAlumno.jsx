@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
-function Agregar({ listaAlumnos, setListaAlumnos, setContador, contador }) {
+import { useParams } from "react-router-dom";
 
+function EditarAlumno({ listaAlumnos, setListaAlumnos, setContador, contador }) {
+
+  const { id } = useParams();
+  console.log(id);
+  
   const [lu, setLu] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -45,7 +50,7 @@ const crearAlumno = (e) => {
     >
       <Card className="shadow-lg rounded-4 p-4" style={{ maxWidth: "600px", width: "100%" }}>
         <Card.Body>
-          <h2 className="mb-4 text-center text-dark fw-bold">Agregar Alumno</h2>
+          <h2 className="mb-4 text-center text-dark fw-bold">Editar Alumno</h2>
           <Form onSubmit={crearAlumno}>
             
             <Form.Group className="mb-3" controlId="formLu">
@@ -154,4 +159,5 @@ const crearAlumno = (e) => {
   );
 }
 
-export default Agregar;
+
+export default EditarAlumno;
