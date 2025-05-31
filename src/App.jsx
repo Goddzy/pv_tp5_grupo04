@@ -18,7 +18,7 @@ function App() {
       <Route exact path="/" element={<Inicio/>}></Route>
       <Route exact path="/agregarAlumno" element={<Agregar listaAlumnos={listaAlumnos} setListaAlumnos={setListaAlumnos} setContador={setContador} contador={contador}/>}></Route>
       <Route exact path="/alumnos" element={<ListaAlumnos listaAlumnos={listaAlumnos} setListaAlumnos={setListaAlumnos}/>}></Route>
-      <Route exact path="/editarAlumno/:id" element={<EditarAlumno/>}></Route>
+      <Route exact path="/editarAlumno/:id" element={<EditarAlumno listaAlumnos={listaAlumnos} setListaAlumnos={setListaAlumnos}/>}></Route>
       <Route exact path="/acerca" element={<AboutUs/>}></Route>
      </Routes>
      <Footer></Footer>

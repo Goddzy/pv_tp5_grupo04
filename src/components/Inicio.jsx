@@ -1,7 +1,3 @@
-import React from "react";
-import Cardalumno from "./CardAlumno";
-import { Container } from "react-bootstrap";
-
 function Inicio() {
   return (
     <div className="home-container d-flex align-items-center justify-content-center text-center">
