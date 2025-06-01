@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+function Agregar({ listaAlumnos, setListaAlumnos, setContador, contador }) {
+
 
 function Agregar({ listaAlumnos, setListaAlumnos }) {
   // Estados para cada input 
+
+
   const [lu, setLu] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -12,6 +15,7 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
   const [domicilio, setDomicilio] = useState("");
   const [telefono, setTelefono] = useState("");
   const [carrera, setCarrera] = useState("");
+
   const [errores, setErrores] = useState({});
 
   const navigate = useNavigate();
@@ -62,6 +66,35 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
     setErrores({});
 
     navigate("/alumnos");
+=======
+const crearAlumno = (e) => {
+    e.preventDefault();
+  if( lu.trim()!="" && nombre.trim()!="" && apellido.trim()!="" && curso.trim()!="" && email.trim()!="" && domicilio.trim()!="" && telefono.trim()!="" && carrera.trim()!=""){
+      const nuevoLu=lu+String(contador);
+      console.log(nuevoLu)
+      const nuevoAlumno = {
+        lu:nuevoLu,
+        nombre,
+        apellido,
+        curso,
+        carrera,
+        email,
+        domicilio,
+        telefono,
+      };
+
+      setListaAlumnos([...listaAlumnos, nuevoAlumno]);
+      setLu("");
+      setNombre("");
+      setApellido("");
+      setCurso("");
+      setEmail("");
+      setDomicilio("");
+      setTelefono("");
+      setCarrera("");
+      setContador(contador+1);
+  }
+
   };
 
   return (
@@ -81,7 +114,7 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
               <Form.Control
                 type="text"
                 disabled
-                value={lu}
+                value={`${lu}${contador}`}
                 onChange={(e) => setLu(e.target.value)}
                 className="rounded-pill border border-dark"
               />

@@ -1,7 +1,14 @@
 import React from "react";
 import { Card, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const CardAlumno = ({ alumno }) => {
+  const navigate = useNavigate();
+
+  const editar = ()=>{
+      navigate(`/editarAlumno/${alumno.lu}`)
+  }
+
   return (
     <Card className="shadow border-0 rounded-4">
       <Card.Body className="p-4">
@@ -19,7 +26,7 @@ const CardAlumno = ({ alumno }) => {
           <Button variant="dark" className="px-3 py-2 mx-1">
             Ver Detalles
           </Button>
-          <Button variant="dark" className="px-3 py-2 mx-1">
+          <Button variant="dark" className="px-3 py-2 mx-1" onClick={editar}>
             Editar
           </Button>
           <Button variant="dark" className="px-3 py-2 mx-1">
