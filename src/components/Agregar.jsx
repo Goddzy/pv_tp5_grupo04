@@ -3,7 +3,7 @@ import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 function Agregar({ listaAlumnos, setListaAlumnos }) {
-  // Estados para cada input
+  // Estados para cada input 
   const [lu, setLu] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -12,47 +12,70 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
   const [domicilio, setDomicilio] = useState("");
   const [telefono, setTelefono] = useState("");
   const [carrera, setCarrera] = useState("");
+  const [errores, setErrores] = useState({});
 
-const navigate = useNavigate(); // Inicializamos useNavigate
+  const navigate = useNavigate();
 
-const crearAlumno = (e) => {
+  const crearAlumno = (e) => {
     e.preventDefault();
-  if( lu.trim()!="" && nombre.trim()!="" && apellido.trim()!="" && curso.trim()!="" && email.trim()!="" && domicilio.trim()!="" && telefono.trim()!="" && carrera.trim()!=""){
-      const nuevoAlumno = {
-        lu,
-        nombre,
-        apellido,
-        curso,
-        carrera,
-        email,
-        domicilio,
-        telefono,
-      };
 
-      setListaAlumnos([...listaAlumnos, nuevoAlumno]);
+    // Objeto para almacenar mensajes de error
+    const validErrors = {};
 
-      setLu("");
-      setNombre("");
-      setApellido("");
-      setCurso("");
-      setEmail("");
-      setDomicilio("");
-      setTelefono("");
-      setCarrera("");
+    // Valida cada campo (se omite LU ya que se asigna automáticamente con la carrera)
+    if (!nombre.trim()) validErrors.nombre = "Completa este campo";
+    if (!apellido.trim()) validErrors.apellido = "Completa este campo";
+    if (!curso.trim()) validErrors.curso = "Completa este campo";
+    if (!email.trim()) validErrors.email = "Completa este campo";
+    if (!domicilio.trim()) validErrors.domicilio = "Completa este campo";
+    if (!telefono.trim()) validErrors.telefono = "Completa este campo";
+    if (!carrera.trim()) validErrors.carrera = "Completa este campo";
 
-       navigate("/alumnos");
-  }
+    // Si hay errores de validación, se actualiza el estado y no se envía el formulario
+    if (Object.keys(validErrors).length > 0) {
+      setErrores(validErrors);
+      return;
+    }
+
+    const nuevoAlumno = {
+      lu,
+      nombre,
+      apellido,
+      curso,
+      carrera,
+      email,
+      domicilio,
+      telefono,
+    };
+
+    setListaAlumnos([...listaAlumnos, nuevoAlumno]);
+    
+    // Limpiar estados y errores
+    setLu("");
+    setNombre("");
+    setApellido("");
+    setCurso("");
+    setEmail("");
+    setDomicilio("");
+    setTelefono("");
+    setCarrera("");
+    setErrores({});
+
+    navigate("/alumnos");
   };
+
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
       style={{ minHeight: "80vh" }}
     >
-      <Card className="shadow-lg rounded-4 p-4" style={{ maxWidth: "600px", width: "100%" }}>
+      <Card
+        className="shadow-lg rounded-4 p-4"style={{ maxWidth: "600px", width: "100%" }} >
         <Card.Body>
-          <h2 className="mb-4 text-center text-dark fw-bold">Agregar Alumno</h2>
+          <h2 className="mb-4 text-center text-dark fw-bold">
+            Agregar Alumno
+          </h2>
           <Form onSubmit={crearAlumno}>
-            
             <Form.Group className="mb-3" controlId="formLu">
               <Form.Label className="fw-semibold text-dark">LU</Form.Label>
               <Form.Control
@@ -67,45 +90,63 @@ const crearAlumno = (e) => {
             <Row className="g-3">
               <Col md={6}>
                 <Form.Group controlId="formNombre">
-                  <Form.Label className="fw-semibold text-dark">Nombre</Form.Label>
+                  <Form.Label className="fw-semibold text-dark">
+                    Nombre
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                     className="rounded-pill border border-dark"
+                    isInvalid={!!errores.nombre}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errores.nombre}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formApellido">
-                  <Form.Label className="fw-semibold text-dark">Apellido</Form.Label>
+                  <Form.Label className="fw-semibold text-dark">
+                    Apellido
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     value={apellido}
                     onChange={(e) => setApellido(e.target.value)}
                     className="rounded-pill border border-dark"
+                    isInvalid={!!errores.apellido}
                   />
+                  <Form.Control.Feedback type="invalid">
+                    {errores.apellido}
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
 
-              <Form.Group className="mb-3" controlId="formCurso">
-                <Form.Label className="fw-semibold text-dark">Carrera</Form.Label>
-                <Form.Select
-                  value={carrera}
-                  onChange={(e) => {setCarrera(e.target.value) 
-                    
-                    setLu(e.target.value)
-                  }
-                  }
-                  className="rounded-pill border border-dark"
-                >
-                  <option value="">Seleccionar carrera</option>
-                  <option value="INF">Ingeniería Informatica</option>
-                  <option value="APU">Analista Programador Universitario</option>
-                  <option value="MIN">Ingenieria en Minas</option>
-                </Form.Select>
-              </Form.Group> 
+            <Form.Group className="mb-3" controlId="formCarrera">
+              <Form.Label className="fw-semibold text-dark">Carrera</Form.Label>
+              <Form.Select
+                value={carrera}
+                onChange={(e) => {
+                  setCarrera(e.target.value);
+                  // Se asigna el valor seleccionado a LU (si así se desea)
+                  setLu(e.target.value);
+                }}
+                className="rounded-pill border border-dark"
+                isInvalid={!!errores.carrera}
+              >
+                <option value="">Seleccionar carrera</option>
+                <option value="INF">Ingeniería Informatica</option>
+                <option value="APU">
+                  Analista Programador Universitario
+                </option>
+                <option value="MIN">Ingeniería en Minas</option>
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                {errores.carrera}
+              </Form.Control.Feedback>
+            </Form.Group>
 
             <Form.Group className="mb-3" controlId="formCurso">
               <Form.Label className="fw-semibold text-dark">Curso</Form.Label>
@@ -114,7 +155,11 @@ const crearAlumno = (e) => {
                 value={curso}
                 onChange={(e) => setCurso(e.target.value)}
                 className="rounded-pill border border-dark"
+                isInvalid={!!errores.curso}
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.curso}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formEmail">
@@ -124,7 +169,11 @@ const crearAlumno = (e) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="rounded-pill border border-dark"
+                isInvalid={!!errores.email}
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.email}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formDomicilio">
@@ -134,7 +183,11 @@ const crearAlumno = (e) => {
                 value={domicilio}
                 onChange={(e) => setDomicilio(e.target.value)}
                 className="rounded-pill border border-dark"
+                isInvalid={!!errores.domicilio}
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.domicilio}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-4" controlId="formTelefono">
@@ -144,11 +197,20 @@ const crearAlumno = (e) => {
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
                 className="rounded-pill border border-dark"
+                isInvalid={!!errores.telefono}
               />
+              <Form.Control.Feedback type="invalid">
+                {errores.telefono}
+              </Form.Control.Feedback>
             </Form.Group>
 
             <div className="d-grid">
-              <Button variant="dark" size="lg" className="rounded-pill" type="submit">
+              <Button
+                variant="dark"
+                size="lg"
+                className="rounded-pill"
+                type="submit"
+              >
                 Agregar Alumno
               </Button>
             </div>
@@ -160,3 +222,5 @@ const crearAlumno = (e) => {
 }
 
 export default Agregar;
+
+
