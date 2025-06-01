@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+
 function Agregar({ listaAlumnos, setListaAlumnos, setContador, contador }) {
-
-
-function Agregar({ listaAlumnos, setListaAlumnos }) {
-  // Estados para cada input 
-
-
+  // Estados para cada input
   const [lu, setLu] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -15,7 +12,6 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
   const [domicilio, setDomicilio] = useState("");
   const [telefono, setTelefono] = useState("");
   const [carrera, setCarrera] = useState("");
-
   const [errores, setErrores] = useState({});
 
   const navigate = useNavigate();
@@ -41,8 +37,12 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
       return;
     }
 
+    // Se crea el LU uniendo el valor de lu y el contador
+    const nuevoLu = lu + String(contador);
+    console.log(nuevoLu);
+
     const nuevoAlumno = {
-      lu,
+      lu: nuevoLu,
       nombre,
       apellido,
       curso,
@@ -53,7 +53,8 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
     };
 
     setListaAlumnos([...listaAlumnos, nuevoAlumno]);
-    
+    setContador(contador + 1);
+
     // Limpiar estados y errores
     setLu("");
     setNombre("");
@@ -66,35 +67,6 @@ function Agregar({ listaAlumnos, setListaAlumnos }) {
     setErrores({});
 
     navigate("/alumnos");
-=======
-const crearAlumno = (e) => {
-    e.preventDefault();
-  if( lu.trim()!="" && nombre.trim()!="" && apellido.trim()!="" && curso.trim()!="" && email.trim()!="" && domicilio.trim()!="" && telefono.trim()!="" && carrera.trim()!=""){
-      const nuevoLu=lu+String(contador);
-      console.log(nuevoLu)
-      const nuevoAlumno = {
-        lu:nuevoLu,
-        nombre,
-        apellido,
-        curso,
-        carrera,
-        email,
-        domicilio,
-        telefono,
-      };
-
-      setListaAlumnos([...listaAlumnos, nuevoAlumno]);
-      setLu("");
-      setNombre("");
-      setApellido("");
-      setCurso("");
-      setEmail("");
-      setDomicilio("");
-      setTelefono("");
-      setCarrera("");
-      setContador(contador+1);
-  }
-
   };
 
   return (
@@ -102,12 +74,9 @@ const crearAlumno = (e) => {
       className="d-flex justify-content-center align-items-center"
       style={{ minHeight: "80vh" }}
     >
-      <Card
-        className="shadow-lg rounded-4 p-4"style={{ maxWidth: "600px", width: "100%" }} >
+      <Card className="shadow-lg rounded-4 p-4" style={{ maxWidth: "600px", width: "100%" }}>
         <Card.Body>
-          <h2 className="mb-4 text-center text-dark fw-bold">
-            Agregar Alumno
-          </h2>
+          <h2 className="mb-4 text-center text-dark fw-bold">Agregar Alumno</h2>
           <Form onSubmit={crearAlumno}>
             <Form.Group className="mb-3" controlId="formLu">
               <Form.Label className="fw-semibold text-dark">LU</Form.Label>
@@ -123,9 +92,7 @@ const crearAlumno = (e) => {
             <Row className="g-3">
               <Col md={6}>
                 <Form.Group controlId="formNombre">
-                  <Form.Label className="fw-semibold text-dark">
-                    Nombre
-                  </Form.Label>
+                  <Form.Label className="fw-semibold text-dark">Nombre</Form.Label>
                   <Form.Control
                     type="text"
                     value={nombre}
@@ -140,9 +107,7 @@ const crearAlumno = (e) => {
               </Col>
               <Col md={6}>
                 <Form.Group controlId="formApellido">
-                  <Form.Label className="fw-semibold text-dark">
-                    Apellido
-                  </Form.Label>
+                  <Form.Label className="fw-semibold text-dark">Apellido</Form.Label>
                   <Form.Control
                     type="text"
                     value={apellido}
@@ -171,9 +136,7 @@ const crearAlumno = (e) => {
               >
                 <option value="">Seleccionar carrera</option>
                 <option value="INF">Ingeniería Informatica</option>
-                <option value="APU">
-                  Analista Programador Universitario
-                </option>
+                <option value="APU">Analista Programador Universitario</option>
                 <option value="MIN">Ingeniería en Minas</option>
               </Form.Select>
               <Form.Control.Feedback type="invalid">
@@ -238,12 +201,7 @@ const crearAlumno = (e) => {
             </Form.Group>
 
             <div className="d-grid">
-              <Button
-                variant="dark"
-                size="lg"
-                className="rounded-pill"
-                type="submit"
-              >
+              <Button variant="dark" size="lg" className="rounded-pill" type="submit">
                 Agregar Alumno
               </Button>
             </div>
@@ -255,5 +213,3 @@ const crearAlumno = (e) => {
 }
 
 export default Agregar;
-
-
