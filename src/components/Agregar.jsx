@@ -15,6 +15,7 @@ function Agregar({ listaAlumnos, setListaAlumnos, setContador, contador }) {
   const [carrera, setCarrera] = useState("");
   const [errores, setErrores] = useState({});
 
+
   const navigate = useNavigate();
 
   const crearAlumno = (e) => {
@@ -53,6 +54,7 @@ function Agregar({ listaAlumnos, setListaAlumnos, setContador, contador }) {
       email,
       domicilio,
       telefono,
+      eliminado: false //variable agregada para hacer el "soft delete"
     };
 
     setListaAlumnos([...listaAlumnos, nuevoAlumno]);

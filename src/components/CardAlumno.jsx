@@ -2,7 +2,7 @@ import React from "react";
 import { Card, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-const CardAlumno = ({ alumno }) => {
+const CardAlumno = ({ alumno, listaAlumnos, setListaAlumnos }) => {
   const navigate = useNavigate();
 
   const verDetalles = () => {
@@ -12,6 +12,22 @@ const CardAlumno = ({ alumno }) => {
   const editar = () => {
     navigate(`/editarAlumno/${alumno.lu}`);
   };
+
+  const eliminarAlumno = (id) => {
+
+    if(window.confirm(`¿Está seguro que quiere eliminar este ${alumno.nombre} ${alumno.apellido}?`)){
+
+        const nuevaLista = listaAlumnos.map((alumno) =>
+          alumno.lu === id
+            ? { ...alumno, eliminado: true }  
+            : alumno                           
+        );
+        setListaAlumnos(nuevaLista);
+
+        console.log(listaAlumnos);
+    }
+};
+
 
   return (
     <Card className="shadow border-0 rounded-4">
@@ -41,7 +57,7 @@ const CardAlumno = ({ alumno }) => {
           >
             Editar
           </Button>
-          <Button variant="dark" className="px-3 py-2 mx-1">
+          <Button variant="dark" className="px-3 py-2 mx-1" onClick={()=>{eliminarAlumno(alumno.lu)}}>
             Eliminar
           </Button>
         </div>
