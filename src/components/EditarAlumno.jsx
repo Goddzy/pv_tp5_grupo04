@@ -1,23 +1,25 @@
-import { useState } from "react";
-import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
+import React, { useState } from "react";
+import {  Container,  Card,  Box,  TextField,  Grid,  Button,  FormControl,  InputLabel,
+  Select,  MenuItem,  FormHelperText,  Typography,} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditarAlumno({ listaAlumnos, setListaAlumnos }) {
-
   const { id } = useParams();
   const navigate = useNavigate();
-  //encontrar el alumno con el id en el array 
 
-  const alumnoBuscado = listaAlumnos.find((alumno) => (alumno.lu === id));
+  // Buscamos por su LU
+  const alumnoBuscado = listaAlumnos.find((alumno) => alumno.lu === id);
 
-  let valorContador='';
-
-  for(let i = 0; i< alumnoBuscado.lu.length; i++){
-    if(alumnoBuscado.lu[i] >= '0' && alumnoBuscado.lu[i] <='9')
-      valorContador+= alumnoBuscado.lu[i]
+  // Extraer los dí­gitos del LU para crear la parte numérica que se reutilizará al actualizar la carrera
+  let valorContador = "";
+  for (let i = 0; i < alumnoBuscado.lu.length; i++) {
+    const char = alumnoBuscado.lu[i];
+    if (char >= "0" && char <= "9") {
+      valorContador += char;
+    }
   }
-  
 
+  // Inicializamos los estados con los datos del alumno encontrado
   const [lu, setLu] = useState(alumnoBuscado.lu);
   const [nombre, setNombre] = useState(alumnoBuscado.nombre);
   const [apellido, setApellido] = useState(alumnoBuscado.apellido);
@@ -27,157 +29,174 @@ function EditarAlumno({ listaAlumnos, setListaAlumnos }) {
   const [telefono, setTelefono] = useState(alumnoBuscado.telefono);
   const [carrera, setCarrera] = useState(alumnoBuscado.carrera);
 
+  // Estado para manejar los mensajes de error en las validaciones
+  const [errores, setErrores] = useState({});
 
-const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-  if( lu.trim()!="" && nombre.trim()!="" && apellido.trim()!="" && curso.trim()!="" && email.trim()!="" && domicilio.trim()!="" && telefono.trim()!="" && carrera.trim()!=""){
-    
+
+    const validErrors = {};
+    if (!nombre.trim()) validErrors.nombre = "Completa este campo";
+    if (!apellido.trim()) validErrors.apellido = "Completa este campo";
+    if (!curso.trim()) validErrors.curso = "Completa este campo";
+    if (!email.trim()) validErrors.email = "Completa este campo";
+    else if (!email.includes("@"))
+      validErrors.email = "Ingrese un correo válido, use @";
+    if (!domicilio.trim()) validErrors.domicilio = "Completa este campo";
+    if (!telefono.trim())
+      validErrors.telefono = "Completa este campo con valores numéricos";
+    if (!carrera.trim()) validErrors.carrera = "Completa este campo";
+
+    if (Object.keys(validErrors).length > 0) {
+      setErrores(validErrors);
+      return;
+    }
 
 
-      const nuevoAlumno = {
-        lu,
-        nombre,
-        apellido,
-        curso,
-        carrera,
-        email,
-        domicilio,
-        telefono,
-      };
+    const alumnoEditado = {
+      lu,
+      nombre,
+      apellido,
+      curso,
+      carrera,
+      email,
+      domicilio,
+      telefono,
+    };
 
-      const nuevoArray = listaAlumnos.map((alumno)=> 
-        alumno.lu === id ? nuevoAlumno : alumno
-      )
 
-      setListaAlumnos(nuevoArray);
+    const nuevoArray = listaAlumnos.map((alumno) =>
+      alumno.lu === id ? alumnoEditado : alumno
+    );
+    setListaAlumnos(nuevoArray);
 
-      setLu("");
-      setNombre("");
-      setApellido("");
-      setCurso("");
-      setEmail("");
-      setDomicilio("");
-      setTelefono("");
-      setCarrera("");
-
-      navigate('/alumnos')
-  }
+    navigate("/alumnos");
   };
+
   return (
-    <Container
-      className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: "80vh" }}
-    >
-      <Card className="shadow-lg rounded-4 p-4" style={{ maxWidth: "600px", width: "100%" }}>
-        <Card.Body>
-          <h2 className="mb-4 text-center text-dark fw-bold">Editar Alumno</h2>
-          <Form onSubmit={handleSubmit}>
-            
-            <Form.Group className="mb-3" controlId="formLu">
-              <Form.Label className="fw-semibold text-dark">LU</Form.Label>
-              <Form.Control
-                type="text"
-                disabled
-                value={`${lu}`}
-                onChange={(e) => setLu(e.target.value)}
-                className="rounded-pill border border-dark"
+    <Container maxWidth="sm" sx={{ my: 4 }}>
+      <Card sx={{ p: 4 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate>
+          <Box sx={{ textAlign: "center", mb: 3 }}>
+            <Typography variant="h4">Editar Alumno</Typography>
+          </Box>
+
+          <TextField
+            label="LU"
+            variant="outlined"
+            fullWidth
+            disabled
+            value={lu}
+            margin="normal"
+          />
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Nombre"
+                variant="outlined"
+                fullWidth
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                margin="normal"
+                error={Boolean(errores.nombre)}
+                helperText={errores.nombre}
               />
-            </Form.Group>
-
-            <Row className="g-3">
-              <Col md={6}>
-                <Form.Group controlId="formNombre">
-                  <Form.Label className="fw-semibold text-dark">Nombre</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                    className="rounded-pill border border-dark"
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formApellido">
-                  <Form.Label className="fw-semibold text-dark">Apellido</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={apellido}
-                    onChange={(e) => setApellido(e.target.value)}
-                    className="rounded-pill border border-dark"
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-
-              <Form.Group className="mb-3" controlId="formCurso">
-                <Form.Label className="fw-semibold text-dark">Carrera</Form.Label>
-                <Form.Select
-                  value={carrera}
-                  onChange={(e) => {
-                       const nuevaCarrera = e.target.value;
-                       setCarrera(nuevaCarrera);
-                       setLu(nuevaCarrera + valorContador);
-                  }}
-                  className="rounded-pill border border-dark"
-                >
-                  <option value="">Seleccionar carrera</option>
-                  <option value="INF">Ingeniería Informatica</option>
-                  <option value="APU">Analista Programador Universitario</option>
-                  <option value="MIN">Ingenieria en Minas</option>
-                </Form.Select>
-              </Form.Group> 
-
-            <Form.Group className="mb-3" controlId="formCurso">
-              <Form.Label className="fw-semibold text-dark">Curso</Form.Label>
-              <Form.Control
-                type="text"
-                value={curso}
-                onChange={(e) => setCurso(e.target.value)}
-                className="rounded-pill border border-dark"
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Apellido"
+                variant="outlined"
+                fullWidth
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
+                margin="normal"
+                error={Boolean(errores.apellido)}
+                helperText={errores.apellido}
               />
-            </Form.Group>
+            </Grid>
+          </Grid>
 
-            <Form.Group className="mb-3" controlId="formEmail">
-              <Form.Label className="fw-semibold text-dark">Email</Form.Label>
-              <Form.Control
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded-pill border border-dark"
-              />
-            </Form.Group>
+          <FormControl fullWidth margin="normal" error={Boolean(errores.carrera)}>
+            <InputLabel id="carrera-label">Carrera</InputLabel>
+            <Select
+              labelId="carrera-label"
+              label="Carrera"
+              value={carrera}
+              onChange={(e) => {
+                const nuevaCarrera = e.target.value;
+                setCarrera(nuevaCarrera);
+                // Actualiza el LU: la nueva carrera con el valor numérico extraído
+                setLu(nuevaCarrera + valorContador);
+              }}
+            >
+              <MenuItem value="">
+                <em>Seleccionar carrera</em>
+              </MenuItem>
+              <MenuItem value="INF">Ingeniería Informatica</MenuItem>
+              <MenuItem value="APU">Analista Programador Universitario</MenuItem>
+              <MenuItem value="MIN">Ingeniería en Minas</MenuItem>
+            </Select>
+            {errores.carrera && (
+              <FormHelperText>{errores.carrera}</FormHelperText>
+            )}
+          </FormControl>
 
-            <Form.Group className="mb-3" controlId="formDomicilio">
-              <Form.Label className="fw-semibold text-dark">Domicilio</Form.Label>
-              <Form.Control
-                type="text"
-                value={domicilio}
-                onChange={(e) => setDomicilio(e.target.value)}
-                className="rounded-pill border border-dark"
-              />
-            </Form.Group>
+          <TextField
+            label="Curso"
+            variant="outlined"
+            fullWidth
+            value={curso}
+            onChange={(e) => setCurso(e.target.value)}
+            margin="normal"
+            error={Boolean(errores.curso)}
+            helperText={errores.curso}
+          />
 
-            <Form.Group className="mb-4" controlId="formTelefono">
-              <Form.Label className="fw-semibold text-dark">Teléfono</Form.Label>
-              <Form.Control
-                type="number"
-                value={telefono}
-                onChange={(e) => setTelefono(e.target.value)}
-                className="rounded-pill border border-dark"
-              />
-            </Form.Group>
+          <TextField
+            label="Email"
+            variant="outlined"
+            fullWidth
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            margin="normal"
+            error={Boolean(errores.email)}
+            helperText={errores.email}
+          />
 
-            <div className="d-grid">
-              <Button variant="dark" size="lg" className="rounded-pill" type="submit">
-                Editar Alumno
-              </Button>
-            </div>
-          </Form>
-        </Card.Body>
+          <TextField
+            label="Domicilio"
+            variant="outlined"
+            fullWidth
+            value={domicilio}
+            onChange={(e) => setDomicilio(e.target.value)}
+            margin="normal"
+            error={Boolean(errores.domicilio)}
+            helperText={errores.domicilio}
+          />
+
+          <TextField
+            label="Teléfono"
+            variant="outlined"
+            fullWidth
+            type="number"
+            value={telefono}
+            onChange={(e) => setTelefono(e.target.value)}
+            margin="normal"
+            error={Boolean(errores.telefono)}
+            helperText={errores.telefono}
+          />
+
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+            Editar Alumno
+          </Button>
+        </Box>
       </Card>
     </Container>
   );
 }
 
-
 export default EditarAlumno;
+
+
