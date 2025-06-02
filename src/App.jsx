@@ -7,6 +7,7 @@ import ListaAlumnos from "./components/ListaAlumnos";
 import AboutUs from "./components/AboutUs";
 import { useState } from "react";
 import EditarAlumno from "./components/EditarAlumno";
+import VerDetalles from "./components/VerDetalles";
 
 function App() {
   const [listaAlumnos,setListaAlumnos]=useState([])
@@ -19,6 +20,7 @@ function App() {
       <Route exact path="/agregarAlumno" element={<Agregar listaAlumnos={listaAlumnos} setListaAlumnos={setListaAlumnos} setContador={setContador} contador={contador}/>}></Route>
       <Route exact path="/alumnos" element={<ListaAlumnos listaAlumnos={listaAlumnos} setListaAlumnos={setListaAlumnos}/>}></Route>
       <Route exact path="/editarAlumno/:id" element={<EditarAlumno listaAlumnos={listaAlumnos} setListaAlumnos={setListaAlumnos}/>}></Route>
+      <Route exact path="/verDetalles/:id" element={<VerDetalles listaAlumnos={listaAlumnos} setListaAlumnos={setListaAlumnos}/>}></Route>
       <Route exact path="/acerca" element={<AboutUs/>}></Route>
      </Routes>
      <Footer></Footer>

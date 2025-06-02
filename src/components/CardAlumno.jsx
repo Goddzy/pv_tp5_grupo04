@@ -5,9 +5,13 @@ import { useNavigate } from "react-router-dom";
 const CardAlumno = ({ alumno }) => {
   const navigate = useNavigate();
 
-  const editar = ()=>{
-      navigate(`/editarAlumno/${alumno.lu}`)
-  }
+  const verDetalles = () => {
+    navigate(`/verDetalles/${alumno.lu}`);
+  };
+
+  const editar = () => {
+    navigate(`/editarAlumno/${alumno.lu}`);
+  };
 
   return (
     <Card className="shadow border-0 rounded-4">
@@ -23,10 +27,18 @@ const CardAlumno = ({ alumno }) => {
           <strong>Teléfono:</strong> {alumno.telefono}
         </Card.Text>
         <div className="text-center mt-4">
-          <Button variant="dark" className="px-3 py-2 mx-1">
+          <Button
+            variant="dark"
+            className="px-3 py-2 mx-1"
+            onClick={verDetalles}
+          >
             Ver Detalles
           </Button>
-          <Button variant="dark" className="px-3 py-2 mx-1" onClick={editar}>
+          <Button
+            variant="dark"
+            className="px-3 py-2 mx-1"
+            onClick={editar}
+          >
             Editar
           </Button>
           <Button variant="dark" className="px-3 py-2 mx-1">
